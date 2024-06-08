@@ -362,4 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-/src/EShopMicroservicesWebApp/Catalog/CatalogAPI/appsettings.json
+/src/EShopMicroservicesWebApp/Services/Catalog/CatalogAPI/appsettings.json
