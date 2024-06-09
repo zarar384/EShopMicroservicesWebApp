@@ -1,0 +1,13 @@
+﻿@CatalogAPI_HostAddress = https://localhost:5050
+
+# POST /api/products
+POST {{CatalogAPI_HostAddress}}/products
+Content-Type: application/json
+
+{
+    "Name": "Product A",
+    "Category": ["a","b"],
+    "Description": "Description Product",
+    "ImageFile": "Image Product",
+    "Price": 123
+}
