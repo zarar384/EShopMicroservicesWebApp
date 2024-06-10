@@ -8,6 +8,10 @@ builder.Services.AddMediatR(config =>
     //where the Program class is located. 
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
+builder.Services.AddMarten(opts =>
+{
+    opts.Connection(builder.Configuration.GetConnectionString("DefaultConnection")!);
+}).UseLightweightSessions();//for performance
 
 var app = builder.Build();
 
