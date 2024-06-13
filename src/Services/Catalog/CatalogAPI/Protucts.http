@@ -11,3 +11,7 @@ Content-Type: application/json
     "ImageFile": "Image Product",
     "Price": 123
 }
+
+###
+# GET /api/products
+GET {{CatalogAPI_HostAddress}}/products
