@@ -25,3 +25,20 @@ GET {{CatalogAPI_HostAddress}}/products/1
 # GET /api/products/category/{category}
 GET {{CatalogAPI_HostAddress}}/products/category/a
 
+### Delete
+# POST /api/products/{id}
+POST {{CatalogAPI_HostAddress}}/products/id
+
+### Update
+# POST /api/products/{id}
+POST {{CatalogAPI_HostAddress}}/products
+Content-Type: application/json
+
+{
+    "Id": 1,
+    "Name": "Product B",
+    "Category": ["a","b"],
+    "Description": "Description Product",
+    "ImageFile": "Image Product",
+    "Price": 234
+}

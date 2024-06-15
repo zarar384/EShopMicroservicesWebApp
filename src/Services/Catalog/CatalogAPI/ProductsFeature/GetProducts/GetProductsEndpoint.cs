@@ -1,6 +1,4 @@
-﻿using CatalogAPI.ProductsFeature.CreateProduct;
-
-namespace CatalogAPI.ProductsFeature.GetProducts
+﻿namespace CatalogAPI.ProductsFeature.GetProducts
 {
     //public record GetProductRequest();
     public record GetProductResponse(IEnumerable<Product> Products);
@@ -19,7 +17,7 @@ namespace CatalogAPI.ProductsFeature.GetProducts
                 return Results.Ok(response);
             })
             .WithName("GetProducts")
-            .Produces<CreateProductResponse>(StatusCodes.Status200OK)
+            .Produces<GetProductResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Get Products")
             .WithDescription("Get Products");

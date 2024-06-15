@@ -1,7 +1,4 @@
-﻿
-using CatalogAPI.ProductsFeature.CreateProduct;
-
-namespace CatalogAPI.ProductsFeature.GetProductByCategory
+﻿namespace CatalogAPI.ProductsFeature.GetProductByCategory
 {
     //public record GetProdcutByCategoryRequest();
     public record GetProductByCategoryResponse(IEnumerable<Product> Products);
@@ -18,7 +15,7 @@ namespace CatalogAPI.ProductsFeature.GetProductByCategory
                 return Results.Ok(response);
             })
             .WithName("GetProductByCaregory")
-            .Produces<CreateProductResponse>(StatusCodes.Status200OK)
+            .Produces<GetProductByCategoryResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Get Product By Category")
             .WithDescription("Get Product By Categpry"); ;
