@@ -15,3 +15,13 @@ Content-Type: application/json
 ###
 # GET /api/products
 GET {{CatalogAPI_HostAddress}}/products
+
+
+###
+# GET /api/products/{id}
+GET {{CatalogAPI_HostAddress}}/products/1
+
+###
+# GET /api/products/category/{category}
+GET {{CatalogAPI_HostAddress}}/products/category/a
+
