@@ -13,7 +13,7 @@
 
             if(product is null)
             {
-                throw new ProductNotFoundExeption();
+                throw new ProductNotFoundExeption(query.Id);
             }
 
             return new GetProductByIdResult(product);
