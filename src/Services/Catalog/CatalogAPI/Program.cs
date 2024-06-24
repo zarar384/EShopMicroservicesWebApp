@@ -9,6 +9,7 @@ builder.Services.AddMediatR(config =>
     //where the Program class is located. 
     config.RegisterServicesFromAssembly(assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
 //scan assembly for any validators and register them
