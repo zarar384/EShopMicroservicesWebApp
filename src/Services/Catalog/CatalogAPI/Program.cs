@@ -22,6 +22,10 @@ builder.Services.AddMarten(opts =>
     opts.Connection(builder.Configuration.GetConnectionString("DefaultConnection")!);
 }).UseLightweightSessions();//for performance
 
+// feel seeds data
+if(builder.Environment.IsDevelopment())
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+
 // global custom exception handler
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
