@@ -20,6 +20,8 @@ builder.Services.AddMarten(opts =>
     opts.Schema.For<ShoppingCart>().Identity(x=>x.UserName);
 }).UseLightweightSessions();//for performance
 
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
 var app = builder.Build();
 
 // configure the HTTP request pipeline
