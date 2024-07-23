@@ -1,8 +1,7 @@
-﻿
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
-namespace BasketAPI.Basket.Data
+namespace BasketAPI.Data
 {
     public class CashedBasketRepository
         (IBasketRepository repository, IDistributedCache cache)
@@ -32,7 +31,7 @@ namespace BasketAPI.Basket.Data
         public async Task<ShoppingCart> StoreBasket(ShoppingCart basket, CancellationToken cancellationToken = default)
         {
             await repository.StoreBasket(basket, cancellationToken);
-            
+
             await cache.SetStringAsync(basket.UserName, JsonSerializer.Serialize(basket), cancellationToken);
 
             return basket;

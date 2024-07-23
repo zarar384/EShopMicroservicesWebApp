@@ -15,6 +15,11 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
+//scan assembly for any validators and register them
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddCarter();
+
 builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("DefaultConnection")!);
@@ -22,6 +27,13 @@ builder.Services.AddMarten(opts =>
 }).UseLightweightSessions();//for performance
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CashedBasketRepository>();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+});
+
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();

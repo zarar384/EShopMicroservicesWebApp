@@ -27,6 +27,12 @@ services:
     ports:
       - "5433:5432"
 
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6379:6379"
+
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

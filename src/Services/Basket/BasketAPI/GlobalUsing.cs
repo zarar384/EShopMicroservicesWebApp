@@ -1,6 +1,6 @@
-﻿global using BasketAPI.Basket.Exceptions;
+﻿global using BasketAPI.Exceptions;
 global using BuildingBlocks.Exceptions;
-global using BasketAPI.Basket.Data;
+global using BasketAPI.Data;
 global using BuildingBlocks.CQRS;
 global using FluentValidation;
 global using BasketAPI.Models;

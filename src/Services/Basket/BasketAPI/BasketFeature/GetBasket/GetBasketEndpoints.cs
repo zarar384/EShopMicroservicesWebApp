@@ -1,4 +1,4 @@
-﻿namespace BasketAPI.Basket.GetBasket
+﻿namespace BasketAPI.BasketFeature.GetBasket
 {
     // mapping to presentation layer
     public record GetBasketResponse(ShoppingCart Cart);
