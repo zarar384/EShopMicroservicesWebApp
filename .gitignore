@@ -364,3 +364,9 @@ FodyWeavers.xsd
 
 /src/Services/Catalog/CatalogAPI/appsettings.json
 /src/Services/Basket/BasketAPI/appsettings.json
+/src/Services/Discount/Discount.Grpc/appsettings.json
+/src/Services/Discount/Discount.Grpc/appsettings.json
+/src/Services/Discount/Discount.Grpc/Migrations
+/src/Services/Discount/Discount.Grpc/discountdb
+/src/Services/Discount/Discount.Grpc/discountdb-shm
+/src/Services/Discount/Discount.Grpc/discountdb-wal
