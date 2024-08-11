@@ -1,4 +1,5 @@
 ﻿using BasketAPI.Data;
+using Discount.Grps;
 
 namespace BasketAPI.BasketFeature.StoreBasket
 {
@@ -14,17 +15,29 @@ namespace BasketAPI.BasketFeature.StoreBasket
         }
     }
 
-    public class StoreBasketCommandHandler(IBasketRepository repository) 
+    public class StoreBasketCommandHandler
+        (IBasketRepository repository, DiscountProtoService.DiscountProtoServiceClient discountProto) 
         : ICommandHandler<StoreBasketCommand, StoreBasketResult>
     {
         public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
         {
-            ShoppingCart cart = command.Cart;
+            //comunicate with Discount.Grps and calculate prices of product
+            await DeductDiscount(command.Cart, cancellationToken);
 
+            // store basket in db (marten upsert - if exist = update, if not = insert)
             await repository.StoreBasket(command.Cart, cancellationToken);
 
-
             return new StoreBasketResult(command.Cart.UserName);
+        }
+
+        private async Task DeductDiscount(ShoppingCart cart, CancellationToken cancellationToken)
+        {
+            //comunicate with Discount.Grps and calculate prices of product
+            foreach (var item in cart.Items)
+            {
+                var coupon = await discountProto.GetDiscountAsync(new GetDiscountRequest { ProductName = item.ProductName }, cancellationToken: cancellationToken);
+                item.Price -= coupon.Amount;
+            }
         }
     }
 }

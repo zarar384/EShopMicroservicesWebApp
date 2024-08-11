@@ -1,10 +1,12 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
+using Discount.Grps;
 using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// add services to the container
+//add services to the container
+//Application Services
 var assembly = typeof(Program).Assembly;
 
 builder.Services.AddMediatR(config =>
@@ -21,6 +23,7 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddCarter();
 
+//Data Services
 builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("DefaultConnection")!);
@@ -34,6 +37,24 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
 });
+
+//Grpc Services
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opts =>
+{
+    opts.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+})
+  .ConfigurePrimaryHttpMessageHandler(() =>
+  {
+      //accept any server certificate validators in gRPC settings
+      //!ONLY for development purpose
+      var handler = new HttpClientHandler
+      {
+          ServerCertificateCustomValidationCallback =
+          HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+      };
+
+      return handler;
+  });
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
