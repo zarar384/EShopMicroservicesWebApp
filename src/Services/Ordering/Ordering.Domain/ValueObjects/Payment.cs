@@ -6,22 +6,17 @@
         public string CardNumber { get; } = default!;
         public string Expiration { get; } = default!;
         public string CVV { get; } = default!;
-        public int PaymentMethod { get; } = default!;
-        public string CardName1 { get; }
-        public string CardNumber1 { get; }
-        public string Expiration1 { get; }
-        public string Cvv { get; }
-        public string PaymentMethod1 { get; }
+        public string PaymentMethod { get; } = default!;
 
         protected Payment() { }
 
         public Payment(string cardName, string cardNumber, string expiration, string cvv, string paymentMethod)
         {
-            CardName1 = cardName;
-            CardNumber1 = cardNumber;
-            Expiration1 = expiration;
-            Cvv = cvv;
-            PaymentMethod1 = paymentMethod;
+            CardName = cardName;
+            CardNumber = cardNumber;
+            Expiration = expiration;
+            CVV = cvv;
+            PaymentMethod = paymentMethod;
         }
 
         public static Payment Of(string cardName, string cardNumber, string expiration, string cvv, string paymentMethod)
