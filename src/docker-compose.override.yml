@@ -37,7 +37,7 @@ services:
     container_name: orderdb
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=mysecretpassword
+      - SA_PASSWORD=StrongPass1!
     restart: always
     ports:
       - "1433:1433"
