@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Enums;
 using Ordering.Domain.Models;
 using Ordering.Domain.ValueObjects;
@@ -61,6 +60,35 @@ namespace Ordering.Infrastructure.Data.Configurations
                         .HasMaxLength(50)
                         .IsRequired();
                 });
+
+            builder.ComplexProperty(
+               o => o.BillingAddress, addressBuilder =>
+               {
+                   addressBuilder.Property(a => a.FirstName)
+                       .HasMaxLength(50)
+                       .IsRequired();
+
+                   addressBuilder.Property(a => a.LastName)
+                       .HasMaxLength(50)
+                       .IsRequired();
+
+                   addressBuilder.Property(a => a.EmailAddress)
+                       .HasMaxLength(50);
+
+                   addressBuilder.Property(a => a.AddressLine)
+                       .HasMaxLength(50)
+                       .IsRequired();
+
+                   addressBuilder.Property(a => a.Country)
+                       .HasMaxLength(50);
+
+                   addressBuilder.Property(a => a.State)
+                       .HasMaxLength(50);
+
+                   addressBuilder.Property(a => a.ZipCode)
+                       .HasMaxLength(50)
+                       .IsRequired();
+               });
 
             builder.ComplexProperty(
                 o => o.Payment, paymentBuilder =>

@@ -11,7 +11,6 @@ Application - MediatR
 API - Carter, HealthChecks, ...
 */
 
-
 builder.Services
     .AddApplicationServices()
     .AddInfrastructureServices(builder.Configuration)
