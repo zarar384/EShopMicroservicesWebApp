@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ordering.Domain.Models;
-using Ordering.Domain.ValueObjects;
 
 namespace Ordering.Infrastructure.Data.Configurations
 {
@@ -18,7 +16,9 @@ namespace Ordering.Infrastructure.Data.Configurations
                 .HasForeignKey(o => o.ProductId);
 
             builder.Property(o => o.Quantity).IsRequired();
-            builder.Property(o=>o.Price).IsRequired();
+            builder.Property(o=>o.Price)
+                .IsRequired()
+                .HasPrecision(18,2);
         }
     }
 }

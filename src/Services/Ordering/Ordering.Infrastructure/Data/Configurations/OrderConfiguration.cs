@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Enums;
-using Ordering.Domain.Models;
-using Ordering.Domain.ValueObjects;
 
 namespace Ordering.Infrastructure.Data.Configurations
 {
@@ -109,13 +107,14 @@ namespace Ordering.Infrastructure.Data.Configurations
                     paymentBuilder.Property(p => p.PaymentMethod);
                 });
 
-            builder.Property(o=>o.Status)
+            builder.Property(o => o.Status)
                 .HasDefaultValue(OrderStatus.Draft)
                 .HasConversion(
-                    s=>s.ToString(),
+                    s => s.ToString(),
                     dbStatus => (OrderStatus)Enum.Parse(typeof(OrderStatus), dbStatus));
 
-            builder.Property(o => o.TotalPrice);
+            builder.Property(o => o.TotalPrice)
+                .HasPrecision(18,2);
         }
     }
 }

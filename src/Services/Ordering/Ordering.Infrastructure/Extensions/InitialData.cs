@@ -33,7 +33,7 @@ namespace Ordering.Infrastructure.Extensions
                 var order1 = Order.Create(
                     OrderId.Of(Guid.NewGuid()),
                     CustomerId.Of(new Guid("e6e99a13-d3a8-4d03-b391-df5d720b2813")),
-                    OrderName.Of("O1"),
+                    OrderName.Of("Order1"),
                     shippingAddress: address1,
                     billingAddress: address1,
                     payment1);
@@ -43,7 +43,7 @@ namespace Ordering.Infrastructure.Extensions
                 var order2 = Order.Create(
                     OrderId.Of(Guid.NewGuid()),
                     CustomerId.Of(new Guid("a236ec92-aba6-4d48-b11a-de0fdb5c7d26")),
-                    OrderName.Of("O2"),
+                    OrderName.Of("Order2"),
                     shippingAddress: address2,
                     billingAddress: address2,
                     payment2);
