@@ -372,3 +372,4 @@ FodyWeavers.xsd
 /src/Services/Discount/Discount.Grpc/discountdb-wal
 /src/Services/Ordering/Ordering.API/appsettings.json
 /src/Services/Ordering/Ordering.Infrastructure/Data/Migrations
+/src/ApiGateways/YarpApiGateways/appsettings.json
