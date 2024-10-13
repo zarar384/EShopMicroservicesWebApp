@@ -376,14 +376,3 @@ FodyWeavers.xsd
 ## ASP.NET Core
 # Ignore everything in wwwroot
 /src/WebApp/Shopping.Web/wwwroot/*
-
-# But don't ignore specific file types in the subdirectories
-!/src/WebApp/Shopping.Web/wwwroot/**/
-!/src/WebApp/Shopping.Web/wwwroot/**/favicon.ico
-!/src/WebApp/Shopping.Web/wwwroot/**/*.css
-!/src/WebApp/Shopping.Web/wwwroot/**/*.js
-!/src/WebApp/Shopping.Web/wwwroot/**/*.png
-!/src/WebApp/Shopping.Web/wwwroot/**/*.jpg
-!/src/WebApp/Shopping.Web/wwwroot/**/*.jpeg
-!/src/WebApp/Shopping.Web/wwwroot/**/*.gif
-!/src/WebApp/Shopping.Web/wwwroot/**/*.svg
