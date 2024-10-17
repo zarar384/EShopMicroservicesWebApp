@@ -373,6 +373,3 @@ FodyWeavers.xsd
 /src/Services/Ordering/Ordering.API/appsettings.json
 /src/Services/Ordering/Ordering.Infrastructure/Data/Migrations
 
-## ASP.NET Core
-# Ignore everything in wwwroot
-/src/WebApp/Shopping.Web/wwwroot/*
