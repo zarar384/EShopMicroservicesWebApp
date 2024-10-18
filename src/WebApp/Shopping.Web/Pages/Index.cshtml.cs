@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Shopping.Web.Pages
 {
     public class IndexModel(ICatalogService catalogService, IBasketService basketService, ILogger<IndexModel> logger)
