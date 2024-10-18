@@ -16,7 +16,7 @@
 
         public async Task<ShoppingCartModel> LoadUserBasket()
         {
-            var userName = "swn";
+            var userName = "Bob";
             ShoppingCartModel basket;
 
             try
