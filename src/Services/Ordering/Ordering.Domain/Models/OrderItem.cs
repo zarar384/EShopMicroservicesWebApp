@@ -10,7 +10,7 @@
             Quantity = quantity;
             Price = price;
         }
-
+        
         public OrderId OrderId { get; private set; } = default!;
         public ProductId ProductId { get; private set; } = default!;
         public int Quantity { get; private set; } = default!;
