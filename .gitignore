@@ -373,3 +373,4 @@ FodyWeavers.xsd
 /src/Services/Ordering/Ordering.API/appsettings.json
 /src/Services/Ordering/Ordering.Infrastructure/Data/Migrations
 
+/src/BuildingBlocks/BuildingBlocks.Observability/appsettings.json

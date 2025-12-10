@@ -1,5 +1,8 @@
+using BuildingBlocks.Observability;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +38,24 @@ builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
+// Add OTEL(OpenTelemetry) 
+builder.Services.AddObservability("Catalog.API", builder.Configuration, opts =>
+{
+    opts.ConfigureMetrics = m =>
+    {
+        m.AddAspNetCoreInstrumentation(); // HTTP request metrics
+        m.AddHttpClientInstrumentation(); // Outgoing HTTP calls metrics
+        m.AddRuntimeInstrumentation();    // GC, memory, threads, CPU
+    };
+
+    opts.ConfigureTracer = t =>
+    {
+        t.AddAspNetCoreInstrumentation();
+        t.AddHttpClientInstrumentation();
+    };
+
+    opts.ConfigureLogging = log => { };
+});
 var app = builder.Build();
 
 // configure the HTTP request pipeline

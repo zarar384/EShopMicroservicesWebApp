@@ -1,8 +1,5 @@
-using OpenTelemetry;
-using OpenTelemetry.Exporter;
-using OpenTelemetry.Logs;
+using BuildingBlocks.Observability;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,39 +24,22 @@ builder.Services.AddRefitClient<IOrderingService>()
     });
 
 // Add OTEL(OpenTelemetry) 
-var otlpUrl = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]!;
-
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(r => r.AddService("Shopping.Web")) // service name
-    .WithMetrics(m => m
-        .AddAspNetCoreInstrumentation()  // HTTP request metrics
-        .AddHttpClientInstrumentation() // Outgoing HTTP calls metrics
-        .AddRuntimeInstrumentation() // GC, memory, threads, CPU
-        .AddOtlpExporter(e => // send metrics to OTLP(OTEL Protocol)
-        {
-            e.Endpoint = new Uri(otlpUrl);
-            e.Protocol = OtlpExportProtocol.Grpc;
-        }))
-    .WithTracing(t => t
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddOtlpExporter(e =>
-        {
-            e.Endpoint = new Uri(otlpUrl);
-            e.Protocol = OtlpExportProtocol.Grpc;
-        }));
-
-builder.Logging.ClearProviders(); // replace default logging with OTL logging
-builder.Logging.AddOpenTelemetry(o =>
+builder.Services.AddObservability("Shopping.Web", builder.Configuration, options =>
 {
-    o.IncludeFormattedMessage = true; // render log message
-    o.IncludeScopes = true; 
-    o.ParseStateValues = true;
-    o.AddOtlpExporter(e => // send to OTLP
+    options.ConfigureMetrics = m =>
     {
-        e.Endpoint = new Uri(otlpUrl);
-        e.Protocol = OtlpExportProtocol.Grpc;
-    });
+        m.AddAspNetCoreInstrumentation(); // HTTP request metrics
+        m.AddHttpClientInstrumentation(); // Outgoing HTTP calls metrics
+        m.AddRuntimeInstrumentation();    // GC, memory, threads, CPU
+    };
+
+    options.ConfigureTracer = t =>
+    {
+        t.AddAspNetCoreInstrumentation();
+        t.AddHttpClientInstrumentation();
+    };
+
+    options.ConfigureLogging = log => { };
 });
 
 var app = builder.Build();

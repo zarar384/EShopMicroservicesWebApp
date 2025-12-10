@@ -1,8 +1,11 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
 using BuildingBlocks.Messaging.MassTransit;
+using BuildingBlocks.Observability;
 using Discount.Grps;
 using HealthChecks.UI.Client;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +69,29 @@ builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!)
     .AddRedis(builder.Configuration.GetConnectionString("RedisConnection")!);
+
+// Add OTEL(OpenTelemetry) 
+builder.Services.AddObservability("Basket.API", builder.Configuration, opts =>
+{
+    opts.ConfigureMetrics = m =>
+    {
+        m.AddAspNetCoreInstrumentation(); // HTTP request metrics
+        m.AddHttpClientInstrumentation(); // Outgoing HTTP calls metrics
+        m.AddRuntimeInstrumentation();    // GC, memory, threads, CPU
+
+        // Redis metics are automatic via ActivitySource
+    };
+
+    opts.ConfigureTracer = t =>
+    {
+        t.AddAspNetCoreInstrumentation();
+        t.AddHttpClientInstrumentation(); // gRPC
+        t.AddSource("StackExchange.Redis");
+        t.AddSource("MassTransit");
+    };
+
+    opts.ConfigureLogging = log => { };
+});
 
 var app = builder.Build();
 

@@ -1,6 +1,9 @@
+using BuildingBlocks.Observability;
 using Discount.Grpc.Data;
 using Discount.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 builder.Services.AddDbContext<DiscountContext>(opt => 
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add OTEL(OpenTelemetry) 
+builder.Services.AddObservability("Discount.GRPC", builder.Configuration, opts =>
+{
+    opts.ConfigureMetrics = m =>
+    {
+        m.AddAspNetCoreInstrumentation(); // also gRPC server metrics
+        m.AddRuntimeInstrumentation();    // GC, memory, threads, CPU
+    };
+
+    opts.ConfigureTracer = t =>
+    {
+        t.AddAspNetCoreInstrumentation(); // also gRPC server traces
+    };
+
+    opts.ConfigureLogging = log => { };
+});
 
 var app = builder.Build();
 

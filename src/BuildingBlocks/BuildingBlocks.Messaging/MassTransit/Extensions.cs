@@ -9,8 +9,14 @@ namespace BuildingBlocks.Messaging.MassTransit
     {
         // Extension method to add the message broker (RabbitMQ in this case) to the IServiceCollection
         public static IServiceCollection AddMessageBroker(
-            this IServiceCollection services, IConfiguration configuration, Assembly? assembly = null)
+            this IServiceCollection services, 
+            IConfiguration configuration, 
+            Assembly? assembly = null,
+            Action<MassTransitOptions>? configureOptions = null)
         {
+            var options = new MassTransitOptions();
+            configureOptions?.Invoke(options);
+
             services.AddMassTransit(config =>
             {
                 // Use kebab-case for endpoint names (e.g., 'order-created' instead of 'OrderCreated')
@@ -18,6 +24,15 @@ namespace BuildingBlocks.Messaging.MassTransit
 
                 if (assembly != null)
                     config.AddConsumers(assembly);
+
+                // CALLBACK FOR ENDPOINT CONFIG
+                if (options.ConfigureEndpoint != null)
+                {
+                    config.AddConfigureEndpointsCallback((ctx, name, endpointCfg) =>
+                    {
+                        options.ConfigureEndpoint(endpointCfg);
+                    });
+                }
 
                 // Configure RabbitMQ as the transport mechanism
                 config.UsingRabbitMq((context, configurator) =>
@@ -28,6 +43,13 @@ namespace BuildingBlocks.Messaging.MassTransit
                         host.Username(configuration["MessageBroker:UserName"]!);
                         host.Password(configuration["MessageBroker:Password"]!);
                     });
+
+                    // custom bus config
+                    options.ConfigureBus?.Invoke(context, configurator);
+
+                    // REQUIRED — register endpoints
+                    configurator.ConfigureEndpoints(context);
+
                 });
             });
 
