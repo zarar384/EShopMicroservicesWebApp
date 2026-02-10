@@ -1,6 +1,7 @@
 using BuildingBlocks.Observability;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Npgsql;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
@@ -52,6 +53,9 @@ builder.Services.AddObservability("Catalog.API", builder.Configuration, opts =>
     {
         t.AddAspNetCoreInstrumentation();
         t.AddHttpClientInstrumentation();
+
+        // PostgreSQL (Marten / Npgsql)
+        t.AddNpgsql();
     };
 
     opts.ConfigureLogging = log => { };

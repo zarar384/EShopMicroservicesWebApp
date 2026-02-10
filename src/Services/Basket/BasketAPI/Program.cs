@@ -4,6 +4,7 @@ using BuildingBlocks.Messaging.MassTransit;
 using BuildingBlocks.Observability;
 using Discount.Grps;
 using HealthChecks.UI.Client;
+using Npgsql;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
@@ -78,16 +79,22 @@ builder.Services.AddObservability("Basket.API", builder.Configuration, opts =>
         m.AddAspNetCoreInstrumentation(); // HTTP request metrics
         m.AddHttpClientInstrumentation(); // Outgoing HTTP calls metrics
         m.AddRuntimeInstrumentation();    // GC, memory, threads, CPU
-
-        // Redis metics are automatic via ActivitySource
     };
 
     opts.ConfigureTracer = t =>
     {
         t.AddAspNetCoreInstrumentation();
         t.AddHttpClientInstrumentation(); // gRPC
-        t.AddSource("StackExchange.Redis");
-        t.AddSource("MassTransit");
+
+        // PostgreSQL (Marten / Npgsql)
+        t.AddNpgsql();
+
+        t.AddRedisInstrumentation(o =>
+        {
+            o.SetVerboseDatabaseStatements = true; // include Redis commands in spans
+        });
+
+        //t.AddSource("StackExchange.Redis");
     };
 
     opts.ConfigureLogging = log => { };

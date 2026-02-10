@@ -32,7 +32,12 @@ builder.Services
         {
             t.AddAspNetCoreInstrumentation();
             t.AddHttpClientInstrumentation();
-            t.AddSource("MassTransit"); // MassTransit 8 automatically create Activity
+
+            // SQL Server (EF Core)
+            t.AddSqlClientInstrumentation(o =>
+            {
+                o.RecordException = true;
+            });
         };
     
         opts.ConfigureLogging = log => { };
