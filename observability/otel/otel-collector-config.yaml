@@ -1,0 +1,46 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:  # прием телеметрии по OTLP/gRPC (.NET сервисы -> OTEL Collector)
+      http:  # прием телеметрии по OTLP/HTTP (если потребуется)
+
+processors:
+  batch: # группирует данные перед отправкой (уменьшает нагрузку на exporters)
+
+  memory_limiter:
+    check_interval: 5s # как часто проверять использование памяти
+    limit_mib: 400     # общий лимит памяти для Collector (защита от OOM - Out Of Memory)
+    spike_limit_mib: 100 # допустимый кратковременный всплеск памяти
+
+exporters:
+
+  otlp/tempo:
+    endpoint: tempo:4317 # отправка трейсов в Tempo по внутренней docker-сети
+    tls:
+      insecure: true     # отключаем TLS (локальная docker-среда)
+
+  prometheus:
+    endpoint: "0.0.0.0:8889" # порт, который Prometheus будет скрапить
+    resource_to_telemetry_conversion:
+      enabled: true # конвертировать resource атрибуты в labels Prometheus
+
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push # отправка логов в Loki
+
+service:
+  pipelines:
+
+    traces:
+      receivers: [otlp] # принимаем трейсы от сервисов
+      processors: [memory_limiter, batch] # защита по памяти + батчинг
+      exporters: [otlp/tempo] # отправляем трейсы в Tempo
+
+    metrics:
+      receivers: [otlp] # принимаем метрики от сервисов
+      processors: [memory_limiter, batch]
+      exporters: [prometheus] # экспортируем метрики для Prometheus
+
+    logs:
+      receivers: [otlp] # принимаем логи от сервисов
+      processors: [memory_limiter, batch]
+      exporters: [loki] # отправляем логи в Loki

@@ -1,0 +1,4 @@
+global:
+  scrape_interval: 15s # как часто скрейпим метрики
+
+scrape_configs: []
